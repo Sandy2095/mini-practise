@@ -2,11 +2,9 @@ import random
 import sys
 
 largestnumber = 50
-number_to_guess = random.randint(1,largestnumber)
+number_to_guess = random.randint(1, largestnumber)
 
 chance = 1
-print(number_to_guess)
-
 while True:
     read_input = int(input("enter number to guess between (1 -{0}):".format(largestnumber)))
     if read_input > largestnumber:
