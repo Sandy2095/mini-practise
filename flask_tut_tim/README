@@ -1,0 +1,258 @@
+
+Lazy loading
+-------------------
+flask use decorator, url right next to the fuction,
+all code uses decorator has to be imported upfront or
+flask will never find your function
+
+to overcome this system enables havind central URL map is "add_url_map()" function
+instead of decorator you have a file to setup all the URLS
+
+views.py
+
+def home():
+    pass
+def about():
+    pass
+
+app.py
+from flask import Flask
+from youapp import views
+app = Flask(__name__)
+app.add_url_map("/",view_func=views.home)
+app.add_url_mapp("/about",view_func=views.about)
+
+
+Simple packages
+----------------
+create one folder "myapp" inside exisitng one and move everything below it.
+rename app.py to __init__.py
+and add setup.py file
+
+
+Blueprints
+-----------
+associate with view function with buleprints when dispathching requests and
+generating url from one endpoint to other
+
+
+Factories & extension
+---------------------
+create_app() or make_app()
+
+app.py
+def create_app(config_filename):
+    app.Flask(__name__)
+    app.config.from_pyfile(config_filename)
+
+    db = SQLALchemy(app)
+
+or --------------
+models.py
+    db = SQLAlchemy()
+app.py
+def create_app(config_filename):
+    app.Flask(__name__)
+    app.config.from_pyfile(config_filename)
+    from todo.model import db
+        db.init_app(app)
+
+
+Mail Feautre
+------------
+    flask-mail - library
+    mail = Mail(app)
+
+    @app.route('/mail'):
+    def send_mail():
+        msg = Message( “Hello Message”, sender=”admin@test.com”, recipients=[“to@test.com”])
+        mail.send(msg)
+
+WSGI(Web Server Gateway Interface)
+------
+how a webserver communicates with web appliccation
+
+Flask with Ajax
+-----------------
+flask-sijax - library
+decorator - @flask_sijax
+
+get query string in flask
+-----------------------------
+http://localhost:5000/?var=sandy
+request.args.get('var')
+
+user-agent
+----------
+request.headers.get('User-Agent')
+
+url_for
+-------
+generating dynamic routes
+<a href = "{{url_for('get_post_id',post_id=post.id)}}">{{post.title}}</a>
+
+create admin interface
+--------------------
+flask-admin - library
+
+what is microframework
+--------------------
+flask provides only core features such as request, routing and blueprints
+other features such has ORM, caching, forms,etc,.. are to be installed with additional
+flask extensions
+
+Thread local object
+-------------------
+thread-safety has provided out of box.
+currrent_app, g, request wihtout worrying about thread locking and concurrency
+
+Application context
+------------------
+keeps track of applicaiton data during request, CLI cmd.
+passing application around each funciton , current_app or "g" proxies are accessed instead
+track of applicaiton level data
+
+with app.app_context():
+    init_db()
+from flask import g --> 'g' global data acessiable
+
+db connects
+-----------
+RDBMS - flask-SQLAlchemy
+mongo - Flask-MongoEngine
+
+restuful application
+--------------------
+flask-api
+flask-restful
+flask-restx
+connecxion
+
+session
+--------
+save data between requests
+session['data'] = [12,3,] -> store data into session
+session.get('data') -> get data from session
+session.pop('data',None) -> delete data from session
+
+Application Dispatch
+--------------------
+Combing mulptiple application on WSGI level
+from werkzueg.serving import run_simple
+if __name__ ="__main__":
+    run_simple('localhost',5000,application , use_reloader=True,
+                    use_debugger=True)
+combine applicaiton
+----
+from werkzueg.middleware.dispatcher import DispatchMiddleware
+from front_app import app as front
+from back_app import app as back
+application = DispatchMiddleware(front,{'/back':back})
+
+Error Handlers
+---------------
+error.py
+
+@simple_page.errorhandler(404)
+def page_not_found(404):
+    return render_template("pages/4o4.html"
+
+setup tools
+-----------
+commonly used to distribute python extension
+extends from disutils
+
+# support of dependencies
+# package registry
+# installatiion mgr pip
+from setuptools import setup
+
+setup(name='your applicaiton',
+           versoin='1.0',
+            long_desfription = __doc__,
+            packages=['myapp'],
+            zip_safe=False,
+            install_requires=[[Flask'])
+
+tagging builds
+-------------
+setup.cfg
+[egg_info]
+tag_build = .dev
+tag_date = 1
+
+[aliases]
+release =egg_info -Db ''
+
+## python setup.py install
+## python setup.py develop
+
+Deploying Fabric
+----------------
+Fabric is tool in python same like Makefile, ability to execute command in
+remote server
+
+from fabric.api import *
+env.user = 'appuser'
+env.hosts = ['abc.com','xyz.com']
+def pack():
+    ##build package
+    local('python setup.py sdist --formats=gztar')
+def deploy():
+    filename=  '.tar.gz'
+    put(source, destinaiton) ## upload temep folder
+    run(pip install /tmp) ## installl package
+
+flash
+------
+Flash("your messaged")
+
+{% with_msg = get_flashed_messaged() %}
+
+DB realted activites
+--------------------
+execute()
+executescript()
+cursor.fetchall()
+
+caching
+--------
+flask-caching -> library
+caching decorator can be written
+
+def caching(timeout=5*60,key='view/{}''):
+    def decorator(func):
+        @wraps
+        def deco_function(*args, **kwargs):
+            cache_key = key.format('somethinf')
+
+
+    return decorator
+
+Uploading files
+---------------
+<form>
+enctype=multipart/form-data
+<input type=file>
+save() - method to save file in location
+secure_filename(file.filename) -> "never trust input" forged, dangeorus
+
+view decorators
+---------------
+route()
+@login_required
+
+def login_required(f):
+    @functools.wraps(f)
+    def deco_func(*args,**kwargs):
+        if g.user is None:
+            return (url_for('login',next=request.url))
+        return f(*args,**kwargs)
+    return deco_func()
+
+@app.route("/")
+@login_required
+def index():
+    pass
+
+

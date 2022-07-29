@@ -1,0 +1,10 @@
+{
+    "name": "Sandy",
+    "hasChild": true,
+    "age": 20,
+    "city": "Mysore",
+    "titles": [
+        "engineer",
+        "charistts"
+    ]
+}
