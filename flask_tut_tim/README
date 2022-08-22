@@ -1,4 +1,3 @@
-
 Lazy loading
 -------------------
 flask use decorator, url right next to the fuction,
@@ -254,5 +253,45 @@ def login_required(f):
 @login_required
 def index():
     pass
+
+
+#### REST API
+
+json - JavaScript Object Notation
+
+Methods
+--------
+GET - Reterive Data
+POST - write new data
+DELETE - delete data
+PUT - Update existing data
+
+CRUD - Create / Read / Update/  Delete
+
+idempotent - post / put
+
+### virutal environment
+
+python -m venv .venv
+source venv/bin/activate
+
+
+## SQLAlchemy
+
+from sqlalchemy improt Integer, String, Column, ForiegnKey,
+
+### create_engine --> create new db connection
+## create_all --> create_all(engine)
+### db.session.add_all()
+### db.session.commit()
+### filter()
+### Entry.select().join(Blog).where(Blog.name == 'Some awesome blog')
+
+
+
+
+
+
+
 
 

@@ -804,3 +804,13 @@ print(sorted(list_tup,key=tupesec,reverse=True))
 
 print(listdummy)
 
+#### __new__ vs __init__
+
+class A():
+    def __new__(cls, *args, **kwargs):
+        print('new method called..')
+
+    def __init__(self):
+        print('init method called..')
+
+A()
